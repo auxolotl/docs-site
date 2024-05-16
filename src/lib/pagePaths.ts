@@ -135,11 +135,11 @@ export function relativePagePaths(wikiEntries: PageLinkData[], currentPath: stri
     }
 
     return {
-        siblingPages: Array.from(siblingPages.values()),
-        childPages: Array.from(childPages.values()),
+        siblingPages: Array.from(siblingPages.values()).sort(),
+        childPages: Array.from(childPages.values()).sort(),
 
-        siblingDirectories,
-        childDirectories,
+        siblingDirectories: siblingDirectories.sort(),
+        childDirectories: childDirectories.sort(),
 
         currentPage,
         parentDirectory,
