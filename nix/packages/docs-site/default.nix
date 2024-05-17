@@ -19,8 +19,8 @@ buildNpmPackage {
   npmFlags = [ "--ignore-scripts" ];
 
   postUnpack = ''
-    mkdir -p $sourceRoot/src/content
-    cp -r ${inputs.wiki} $sourceRoot/src/content/wiki
+    mkdir -p $sourceRoot/src/content/wiki
+    cp -r ${inputs.wiki}/* $sourceRoot/src/content/wiki
   '';
 
   installPhase = ''
