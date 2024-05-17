@@ -1,0 +1,16 @@
+---
+import "../style/content.css";
+
+import { type CollectionEntry } from 'astro:content';
+
+type Props = { post: CollectionEntry<'wiki'> };
+
+const { post } = Astro.props;
+
+const { Content } = await post.render();
+---
+
+
+<div class="contents">
+    <Content />
+</div>

@@ -1,0 +1,81 @@
+---
+import { relativePagePaths } from "../lib/pagePaths";
+import { getCollection } from "astro:content";
+
+type Props = { path: string }
+
+const { path } = Astro.props;
+
+const wikiPages = await getCollection("wiki");
+const pages = relativePagePaths(wikiPages, path);
+
+---
+
+<style>
+    .navpage {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        width: 100%;
+        height: 100%
+    }
+    .navpage > ul {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+    .navpage > ul > li {
+        /* background: var(--bg-navpage-item); */
+        list-style: none;
+        text-transform: capitalize;
+    }
+    .navpage > ul > li:hover {
+        /* background: var(--bg-navpage-accent); */
+        background: aquamarine;
+    }
+    .active {
+        /* background: var(--bg-navpage-active); */
+        background: #eee;
+    }
+    .next {
+        margin-left: 1em;
+    }
+    .navpage > ul > li > a {
+        padding: .25em .5em;
+        display: block;
+    }
+    .separator {
+        height: .125em;
+        /* background: var(--bg-navpage-line); */
+        background: #f00;
+        margin: .125em 0em;
+    }
+</style>
+
+<nav class="navpage">
+    <ul>
+        {
+            pages.childDirectories.map(page =>
+                <li>
+                    <a class="next"
+                        href={"/" + page.id}
+                    >
+                    {page.data.title.replaceAll("-", " ")}/
+                    </a>
+                </li>
+            )
+        }
+        {
+            pages.childPages.map(page =>
+                <li>
+                    <a class="next"
+                        href={"/" + page.id}
+                    >
+                    {page.data.title}
+                    </a>
+                </li>
+            )
+        }
+    </ul>
+</nav>

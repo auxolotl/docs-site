@@ -1,0 +1,15 @@
+.contents table {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.contents td {
+    padding: 1em;
+    border: 1px solid black;
+}
+
+.contents {
+    overflow: scroll;
+    height: 100vh;
+    padding: 0em 2em;
+}

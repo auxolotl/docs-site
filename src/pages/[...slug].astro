@@ -1,0 +1,97 @@
+---
+import { type CollectionEntry, getCollection, getEntry } from 'astro:content';
+import NavBar from '../components/NavBar.astro';
+import Renderer from '../components/Renderer.astro';
+import NavPage from '../components/NavPage.astro';
+import "../style/globals.css"
+import { allPageAndDirectoryPaths } from "../lib/pagePaths";
+import { parse } from "node:path"
+
+export async function getStaticPaths() {
+	const wikiPages = await getCollection('wiki');
+    const paths = allPageAndDirectoryPaths(wikiPages);
+	return [
+        {
+            params: { slug: undefined },
+            props: { path: "home", name: "Home", post: await getEntry("wiki", "home") }
+        },
+        ...Array.from(paths.entries()).flatMap(([key, post]) => {
+            if (!post) {
+                return [{
+                    params: { slug: key },
+                    props: { path: key, name: parse(key).name }
+                }]
+            } else {
+                return [
+                    {
+                        params: { slug: post.slug },
+                        props: { path: post.id, name: post.data.title, post },
+                    },
+                    {
+                        params: { slug: post.slug + ".md" },
+                        props: { path: post.id, name: post.data.title, post },
+                    }
+                ]
+            }
+        })
+
+        // ...pages.flatMap((post: CollectionEntry<'wiki'> | undefined) => {
+        //     if (!post) {
+        //         return [{
+        //             params: { slug:  }
+        //         }]
+        //     } else {
+        //         return [
+        //             {
+        //                 params: { slug: post.slug },
+        //                 props: { path: post.id, name: post.data.title, post },
+        //             },
+        //             {
+        //                 params: { slug: post.slug + ".md" },
+        //                 props: { path: post.id, name: post.data.title, post },
+        //             }
+        //         ]
+        //     }
+        // })
+    ];
+}
+
+type Props = {
+    post?: CollectionEntry<'wiki'>
+    path: string;
+    name: string;
+};
+
+const { post, path, name } = Astro.props;
+---
+
+<head>
+    <meta charset="utf-8">
+    <title>Aux Docs - {name}</title>
+</head>
+<style>
+    .box {
+        display: flex;
+        flex-direction: row;
+        margin: 0;
+        height: 100vh;
+    }
+    .nav-pane {
+        display: flex;
+        flex-direction: column;
+        min-width: 16em;
+        width: fit-content;
+    }
+</style>
+<body class="box">
+    <div class="nav-pane">
+        <NavBar currentPage={path} />
+    </div>
+    {
+        post ? (
+        <Renderer post={post} />
+        ) : (
+            <NavPage path={path} />
+        )
+    }
+</body>

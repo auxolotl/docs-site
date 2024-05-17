@@ -1,0 +1,124 @@
+---
+import { getCollection } from "astro:content";
+import { relativePagePaths } from "../lib/pagePaths";
+
+type Props = { currentPage: string };
+
+const { currentPage } = Astro.props;
+
+const wikiPages = await getCollection("wiki");
+const pages = relativePagePaths(wikiPages, currentPage);
+
+---
+
+<style>
+    .navbar {
+        /* background: var(--bg-navbar); */
+        background: #ccc;
+        padding: .1em 0em;
+        height: 100%;
+    }
+    .navbar > ul {
+        display: flex;
+        flex-direction: column;
+        padding: 0;
+    }
+    .navbar > ul > li {
+        /* background: var(--bg-navbar-item); */
+        list-style: none;
+        text-transform: capitalize;
+    }
+    .navbar > ul > li:hover {
+        /* background: var(--bg-navbar-accent); */
+        background: aquamarine;
+    }
+    .active {
+        /* background: var(--bg-navbar-active); */
+        background: #eee;
+    }
+    .next {
+        margin-left: 1em;
+    }
+    .navbar > ul > li > a {
+        padding: .25em .5em;
+        display: block;
+    }
+    .separator {
+        height: .125em;
+        /* background: var(--bg-navbar-line); */
+        background: #f00;
+        margin: .125em 0em;
+    }
+</style>
+<nav class="navbar">
+    <ul>
+        {
+            pages.parentDirectory ?
+            <li>
+                <a
+                    href={"/" + pages.parentDirectory.id}
+                >
+                {pages.parentDirectory.data.title.replaceAll("-", " ")}/
+                </a>
+            </li><div class="separator" /> : null
+        }
+        {
+            pages.siblingDirectories.map(page =>
+                <li>
+                    <a
+                        href={"/" + page.id}
+                    >
+                    {page.data.title.replaceAll("-", " ")}/
+                    </a>
+                </li>
+            )
+        }
+        {
+            pages.siblingPages.map(page =>
+                <li>
+                    <a
+                        href={"/" + page.id}
+                    >
+                    {page.data.title}
+                    </a>
+                </li>
+            )
+        }
+        {
+            pages.siblingDirectories.length || pages.siblingPages.length ?
+            <div class="separator" />
+            : null
+        }
+        {
+            <li>
+                <a class="active"
+                    href={"/" + pages.currentPage.id}
+                >
+                {pages.childPages.length || pages.childDirectories.length ? `${pages.currentPage.data.title.replaceAll("-", " ")}/` : pages.currentPage.data.title}
+                </a>
+            </li>
+        }
+        {
+            pages.childDirectories.map(page =>
+                <li>
+                    <a class="next"
+                        href={"/" + page.id}
+                    >
+                    {page.data.title.replaceAll("-", " ")}/
+                    </a>
+                </li>
+            )
+        }
+        {
+            pages.childPages.map(page =>
+                <li>
+                    <a class="next"
+                        href={"/" + page.id}
+                    >
+                    {page.data.title}
+                    </a>
+                </li>
+            )
+        }
+    </ul>
+</nav>
