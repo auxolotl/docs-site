@@ -149,11 +149,11 @@
     "wiki": {
       "flake": false,
       "locked": {
-        "lastModified": 1715898404,
-        "narHash": "sha256-2etxkOw7LGoKB9w9/ZGUQK+MKasDj5gMGWF6CZjFj0M=",
+        "lastModified": 1716051986,
+        "narHash": "sha256-BGEMtyp6aLNSj3iXxwgwQhXF2PvgQ8MGISymRN7mBhA=",
         "owner": "auxolotl",
         "repo": "wiki",
-        "rev": "79717a98d2b429fc679b90146d2d8e8067cea34a",
+        "rev": "63d7ec2ca3fc237c86ca207ce116573ee72122a5",
         "type": "github"
       },
       "original": {
