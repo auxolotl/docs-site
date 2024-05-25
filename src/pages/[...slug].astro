@@ -68,6 +68,11 @@ const { post, path, name } = Astro.props;
 <head>
     <meta charset="utf-8">
     <title>Aux Docs - {name}</title>
+	{
+        post ? (
+			<link rel="canonical" href={`https://wiki.auxolotl.org/${path}`} />
+        ) : null
+    }
 </head>
 <style>
     .box {
