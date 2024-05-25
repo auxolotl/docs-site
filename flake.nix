@@ -28,11 +28,14 @@
         namespace = "auxolotl--docs-site";
       };
 
-      outputs-builder = channels: let
-        treefmt = inputs.treefmt-nix.lib.evalModule channels.nixpkgs ./treefmt.nix;
-      in {
-        formatter = treefmt.config.build.wrapper;
-        checks.formatting = treefmt.config.build.check inputs.self;
-      };
+      outputs-builder =
+        channels:
+        let
+          treefmt = inputs.treefmt-nix.lib.evalModule channels.nixpkgs ./treefmt.nix;
+        in
+        {
+          formatter = treefmt.config.build.wrapper;
+          checks.formatting = treefmt.config.build.check inputs.self;
+        };
     };
 }
